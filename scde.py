@@ -36,5 +36,5 @@ def clustering(train,k):
     print("begin sc clustering")
     sc = SpectralClustering(n_clusters=k, eigen_solver='arpack', affinity="nearest_neighbors")
     sc_result = sc.fit_predict(encoded_data[:5000]) # TODO 跑60000个数据还是不行，时间超久
-    
+    print("end sc clustering")
     return sc_result
