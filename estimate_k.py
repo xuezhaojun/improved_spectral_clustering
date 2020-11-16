@@ -16,12 +16,12 @@ def estimate_mnist(upper_bound,train):
     encoder = Model(input,encoded)
 
     autoencoder.compile(optimizer='sgd',loss=scde.loss_func_in_scde_plus(encoded))
-    # epochs = 50 一般,为了计算快速，目前设置为5
-    autoencoder.fit(train,train,epochs=5, batch_size=256, shuffle=True,validation_data=(train,train))
+    autoencoder.fit(train,train,epochs=50, batch_size=256, shuffle=True,validation_data=(train,train))
 
     return encoder.predict(train)
 
-def get_k_from_result(result):
+# unpper_bound : k_u in paper
+def get_k_from_result(unpper_bound,result):
     # count for k
     max_indexs = {}
     for ps in result:
@@ -33,5 +33,12 @@ def get_k_from_result(result):
                 max_value = p
                 max_index = index
             index += 1
-        max_indexs[max_index] = True
-    return len(max_indexs)
+        if max_indexs.get(max_index) == None:
+            max_indexs[max_index] = 1
+        else:
+            max_indexs[max_index] += 1
+    count = 0
+    for _,v in max_indexs.items():
+        if len(v) > (1/unpper_bound)*len(result):
+            count+=1
+    return count
