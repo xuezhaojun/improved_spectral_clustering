@@ -1,6 +1,11 @@
-datasets.py: 
+### datasets.py: 
+
     provide functions to get datasets
-scde.py: 
+
+### scde.py: 
+    
     provide functions related to scde+ 
-estimate_k:
+
+### estimate_k.py:
+
     privide functions to estimate k in dataset
