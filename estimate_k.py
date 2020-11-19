@@ -5,7 +5,7 @@ import tensorflow as tf
 tf.config.run_functions_eagerly(True)
 
 # unpper_bound : k_u in paper
-def estimate_mnist(upper_bound,train,test):
+def estimate(upper_bound,train):
     input = Input(shape=(train.shape[1],))
     encoded = Dense(50, activation='relu')(input)
     encoded = Dense(upper_bound, activation='softmax')(encoded)
@@ -17,10 +17,11 @@ def estimate_mnist(upper_bound,train,test):
 
     autoencoder.compile(optimizer='sgd',loss=clusters.loss_func_in_scde_plus(encoded))
     # 内存原因：50个epochs会报错
-    autoencoder.fit(train,train,epochs=40, batch_size=256, shuffle=True,validation_data=(train,train))
+    autoencoder.fit(train,train,epochs=50, batch_size=256, shuffle=True,validation_data=(train,train))
 
-    return encoder.predict(test)
+    return encoder.predict(train)
 
+# not used now
 # unpper_bound : k_u in paper
 def get_k_from_result(unpper_bound,result):
     # count for k
@@ -39,7 +40,9 @@ def get_k_from_result(unpper_bound,result):
         else:
             max_indexs[max_index] += 1
     count = 0
+    print("max_indexs:")
+    print(max_indexs)
     for _,v in max_indexs.items():
-        if len(v) > (1/unpper_bound)*len(result):
+        if v > (1/unpper_bound)*result.shape[0]:
             count+=1
     return count

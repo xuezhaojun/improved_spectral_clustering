@@ -6,7 +6,7 @@ from sklearn.metrics.cluster import normalized_mutual_info_score
 
 # standard squered error is a loss function
 def sse(y_true, y_pred):
-    return K.sum(K.square(y_pred-y_true),axis=-1) # TODO what is -1?
+    return K.sum(K.square(y_pred-y_true),axis=-1)
 
 # z: the output of inner layer
 def loss_func_in_scde_plus(z):
@@ -27,8 +27,8 @@ def de(train,test):
     decoded = layers.Dense(2000, activation='relu')(encoded)
     decoded = layers.Dense(500, activation='relu')(decoded)
     decoded = layers.Dense(500, activation='relu')(decoded)
-    decoded = layers.Dense(input_dim, activation="sigmoid")(decoded) 
-    
+    decoded = layers.Dense(input_dim, activation="linear")(decoded) 
+
     # creater autoencoder
     autoencoder = keras.Model(input, decoded)
     encoder = keras.Model(input, encoded)

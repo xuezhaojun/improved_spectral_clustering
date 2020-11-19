@@ -2,7 +2,7 @@
 import tensorflow.keras.datasets.mnist as mnist
 import tensorflow.keras.datasets.fashion_mnist as fashion_mnist
 import h5py
-from tensorflow.keras.datasets import reuters
+from tensorflow.keras.datasets import reuters,cifar100
 from sklearn.datasets import fetch_20newsgroups
 
 # minist
@@ -31,11 +31,10 @@ def get_usps():
         target = train.get('target')[:]
         return data, target
 
-# stl-10
-# TODO：size = 2GB so not going to prepare this one
-# the python code to read the data : https://github.com/mttk/STL10/blob/master/stl10_input.py
-def get_stl_10():
-    return
+# cifar20
+def get_cifar20():
+    (train, train_label), (test, test_lables) = cifar100.load_data(label_mode="coarse")
+    return train,train_label,test,test_lables
 
 # reuters-8
 def get_reuters_8():
