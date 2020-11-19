@@ -7,13 +7,13 @@ from sklearn.datasets import fetch_20newsgroups
 
 # minist
 def get_mnist():
-    (x_train, lable), (_, _) = mnist.load_data()
-    return x_train,lable
+    (train, train_lable), (test, test_lable) = mnist.load_data()
+    return train,train_lable, test, test_lable
 
 # fashion-mnist
 def get_fashion_mnist():
-    (x_train,lable),(_,_) = fashion_mnist.load_data()
-    return x_train, lable
+    (train,train_lable),(test,test_lable) = fashion_mnist.load_data()
+    return train, train_lable, test, test_lable
 
 # usps
 # with h5py.File(path, 'r') as hf:
@@ -39,8 +39,8 @@ def get_stl_10():
 
 # reuters-8
 def get_reuters_8():
-    (train_data, train_labels), (_, _) = reuters.load_data()
-    return train_data,train_labels
+    (train, train_label), (test, test_lables) = reuters.load_data()
+    return train,train_label,test,test_lables
 
 # 20 newsgroups
 def get_20_newsgroups():

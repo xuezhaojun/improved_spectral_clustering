@@ -1,11 +1,11 @@
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Dense, Input
-import scde
+import clusters
 import tensorflow as tf
-tf.config.experimental_run_functions_eagerly(True)
+tf.config.run_functions_eagerly(True)
 
 # unpper_bound : k_u in paper
-def estimate_mnist(upper_bound,train):
+def estimate_mnist(upper_bound,train,test):
     input = Input(shape=(784,))
     encoded = Dense(50, activation='relu')(input)
     encoded = Dense(upper_bound, activation='softmax')(encoded)
@@ -15,10 +15,11 @@ def estimate_mnist(upper_bound,train):
     autoencoder = Model(input,decoded)
     encoder = Model(input,encoded)
 
-    autoencoder.compile(optimizer='sgd',loss=scde.loss_func_in_scde_plus(encoded))
-    autoencoder.fit(train,train,epochs=50, batch_size=256, shuffle=True,validation_data=(train,train))
+    autoencoder.compile(optimizer='sgd',loss=clusters.loss_func_in_scde_plus(encoded))
+    # 内存原因：50个epochs会报错
+    autoencoder.fit(train,train,epochs=40, batch_size=256, shuffle=True,validation_data=(train,train))
 
-    return encoder.predict(train)
+    return encoder.predict(test)
 
 # unpper_bound : k_u in paper
 def get_k_from_result(unpper_bound,result):
