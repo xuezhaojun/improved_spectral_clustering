@@ -6,11 +6,11 @@ tf.config.run_functions_eagerly(True)
 
 # unpper_bound : k_u in paper
 def estimate_mnist(upper_bound,train,test):
-    input = Input(shape=(784,))
+    input = Input(shape=(train.shape[1],))
     encoded = Dense(50, activation='relu')(input)
     encoded = Dense(upper_bound, activation='softmax')(encoded)
     decoded = Dense(50, activation='relu')(encoded)
-    decoded = Dense(784, activation='linear')(decoded)
+    decoded = Dense(train.shape[1], activation='linear')(decoded)
 
     autoencoder = Model(input,decoded)
     encoder = Model(input,encoded)
