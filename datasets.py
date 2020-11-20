@@ -7,14 +7,6 @@ from sklearn import datasets
 
 # datasets sorted by dim
 
-# wine
-# dim: 13
-# train: 178
-# class: 3
-def get_wine():
-    wine = datasets.load_wine()
-    return wine.data, wine.target
-
 # uci
 # This is a copy of the test set of the UCI ML hand-written digits datasets
 # dim: 64
@@ -67,12 +59,3 @@ def get_fashion_mnist():
 def get_cifar10():
     (train, train_lable), (test, test_lables) = cifar10.load_data()
     return train, train_lable, test, test_lables
-
-# cifar20
-# dim: 3072
-# train: 50000
-# test: 10000
-# class: 20
-def get_cifar20():
-    (train, train_label), (test, test_lables) = cifar100.load_data(label_mode="coarse")
-    return train,train_label,test,test_lables
