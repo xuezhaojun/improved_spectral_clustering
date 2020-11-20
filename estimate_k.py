@@ -20,7 +20,7 @@ def estimate(upper_bound,train):
 
     autoencoder.compile(optimizer='sgd',loss=clusters.loss_func_in_scde_plus(encoded))
     # 内存原因：50个epochs会报错
-    autoencoder.fit(train,train,epochs=50, batch_size=256, shuffle=True,validation_data=(train,train))
+    autoencoder.fit(train,train,epochs=50, batch_size=256, shuffle=True)
 
     return encoder.predict(train)
 
