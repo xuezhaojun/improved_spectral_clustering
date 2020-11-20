@@ -59,7 +59,7 @@ def show_gray_img(img,embeded_img):
         ax.get_yaxis().set_visible(False)
     plt.show()
 
-def de(train,test,innermost):
+def de(train,test,innermost, m_epochs=50):
     # make autoencoder
     input_dim = train.shape[1]
     
@@ -80,7 +80,59 @@ def de(train,test,innermost):
 
     # train data
     autoencoder.compile(loss=sse, optimizer='sgd')
-    autoencoder.fit(train, train, epochs=50, batch_size=256,shuffle=True)
+    autoencoder.fit(train, train, epochs=m_epochs, batch_size=256,shuffle=True)
+
+    # use encoder to encode raw data
+    return encoder.predict(test)
+
+def de_smaller(train,test,innermost, m_epochs=50):
+    # make autoencoder
+    input_dim = train.shape[1]
+    
+    input = keras.Input(shape=(input_dim,))
+    encoded = layers.Dense(200, activation="relu")(input)
+    encoded = layers.Dense(200, activation='relu')(encoded)
+    encoded = layers.Dense(1000, activation='relu')(encoded)
+    encoded = layers.Dense(innermost, activation='sigmoid')(encoded)
+
+    decoded = layers.Dense(1000, activation='relu')(encoded)
+    decoded = layers.Dense(200, activation='relu')(decoded)
+    decoded = layers.Dense(200, activation='relu')(decoded)
+    decoded = layers.Dense(input_dim, activation="relu")(decoded) 
+
+    # creater autoencoder
+    autoencoder = keras.Model(input, decoded)
+    encoder = keras.Model(input, encoded)
+
+    # train data
+    autoencoder.compile(loss=sse, optimizer='sgd')
+    autoencoder.fit(train, train, epochs=m_epochs, batch_size=256,shuffle=True)
+
+    # use encoder to encode raw data
+    return encoder.predict(test)
+
+def de_with_adam(train,test,innermost, m_epochs=50):
+    # make autoencoder
+    input_dim = train.shape[1]
+    
+    input = keras.Input(shape=(input_dim,))
+    encoded = layers.Dense(500, activation="relu")(input)
+    encoded = layers.Dense(500, activation='relu')(encoded)
+    encoded = layers.Dense(2000, activation='relu')(encoded)
+    encoded = layers.Dense(innermost, activation='sigmoid')(encoded)
+
+    decoded = layers.Dense(2000, activation='relu')(encoded)
+    decoded = layers.Dense(500, activation='relu')(decoded)
+    decoded = layers.Dense(500, activation='relu')(decoded)
+    decoded = layers.Dense(input_dim, activation="relu")(decoded) 
+
+    # creater autoencoder
+    autoencoder = keras.Model(input, decoded)
+    encoder = keras.Model(input, encoded)
+
+    # train data
+    autoencoder.compile(loss=sse, optimizer='adam')
+    autoencoder.fit(train, train, epochs=m_epochs, batch_size=256,shuffle=True)
 
     # use encoder to encode raw data
     return encoder.predict(test)
