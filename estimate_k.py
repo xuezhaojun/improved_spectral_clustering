@@ -20,7 +20,7 @@ def estimate(upper_bound,train):
 
     autoencoder.compile(optimizer='sgd',loss=clusters.loss_func_in_scde_plus(encoded))
     # 内存原因：50个epochs会报错
-    autoencoder.fit(train,train,epochs=50, batch_size=256, shuffle=True)
+    autoencoder.fit(train,train,epochs=50, batch_size=256, shuffle=True,validation_data=(train,train))
 
     return encoder.predict(train)
 
@@ -42,7 +42,7 @@ def get_k_from_result(result):
             max_indexs[max_index] = 1
         else:
             max_indexs[max_index] += 1
-        return len(max_indexs)
+    return len(max_indexs)
 
 def SS(begin, end, dataset):
     k = begin
@@ -55,6 +55,7 @@ def SS(begin, end, dataset):
         if score > max_score:
             max_k = k
             max_score = score
+        k+=1
     return max_k
 
 def DB(begin, end, dataset):
@@ -68,4 +69,5 @@ def DB(begin, end, dataset):
         if score > max_score:
             max_k = k
             max_score = score
+        k+=1
     return max_k
