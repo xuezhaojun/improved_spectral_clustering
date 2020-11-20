@@ -29,7 +29,11 @@ def get_usps():
         train = hf.get('train')
         data = train.get('data')[:]
         target = train.get('target')[:]
-        return data, target
+
+        test = hf.get('test')
+        test_data = test.get('data')[:]
+        test_target = test.get('target')[:]
+        return data, target, test_data, test_target
 
 # cifar20
 def get_cifar20():

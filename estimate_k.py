@@ -1,6 +1,9 @@
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Dense, Input
 import clusters
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+from sklearn.metrics import davies_bouldin_score
 import tensorflow as tf
 tf.config.run_functions_eagerly(True)
 
@@ -17,13 +20,13 @@ def estimate(upper_bound,train):
 
     autoencoder.compile(optimizer='sgd',loss=clusters.loss_func_in_scde_plus(encoded))
     # 内存原因：50个epochs会报错
-    autoencoder.fit(train,train,epochs=50, batch_size=256, shuffle=True,validation_data=(train,train))
+    autoencoder.fit(train,train,epochs=50, batch_size=256, shuffle=True)
 
     return encoder.predict(train)
 
 # not used now
 # unpper_bound : k_u in paper
-def get_k_from_result(unpper_bound,result):
+def get_k_from_result(result):
     # count for k
     max_indexs = {}
     for ps in result:
@@ -39,10 +42,30 @@ def get_k_from_result(unpper_bound,result):
             max_indexs[max_index] = 1
         else:
             max_indexs[max_index] += 1
-    count = 0
-    print("max_indexs:")
-    print(max_indexs)
-    for _,v in max_indexs.items():
-        if v > (1/unpper_bound)*result.shape[0]:
-            count+=1
-    return count
+        return len(max_indexs)
+
+def SS(begin, end, dataset):
+    k = begin
+    max_score = 0
+    max_k = -1
+    while k <= end:
+        km = KMeans(n_clusters=k, max_iter=200)
+        km_result = km.fit_predict(dataset)
+        score = silhouette_score(dataset,km_result)
+        if score > max_score:
+            max_k = k
+            max_score = score
+    return max_k
+
+def DB(begin, end, dataset):
+    k = begin
+    max_score = 0
+    max_k = -1
+    while k <= end:
+        km = KMeans(n_clusters=k, max_iter=200)
+        km_result = km.fit_predict(dataset)
+        score = davies_bouldin_score(dataset,km_result)
+        if score > max_score:
+            max_k = k
+            max_score = score
+    return max_k
