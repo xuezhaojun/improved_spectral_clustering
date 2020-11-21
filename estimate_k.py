@@ -19,10 +19,9 @@ def estimate(upper_bound,train):
     encoder = Model(input,encoded)
 
     autoencoder.compile(optimizer='sgd',loss=clusters.loss_func_in_scde_plus(encoded))
-    # 内存原因：50个epochs会报错
     autoencoder.fit(train,train,epochs=50, batch_size=256, shuffle=True)
 
-    return encoder.predict(train)
+    return get_k_from_result(encoder.predict(train))
 
 # not used now
 # unpper_bound : k_u in paper

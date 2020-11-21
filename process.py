@@ -1,4 +1,6 @@
 import numpy as np
+from tensorflow.python.keras.activations import swish
+from tensorflow.python.keras.backend import switch
 import clusters
 import datasets as ds
 import estimate_k as ek
@@ -41,7 +43,10 @@ cifar_test_lable_1d = []
 for lable in cifar_test_lable:
     cifar_test_lable_1d.append(lable[0])
 
-def process(dataset, train, test, test_lable, true_k):
+def process(dataset):
+    # get train,test,test_talbe,true_k by dataset
+    train, test, test_lable, true_k = init_dataset(dataset)
+
     estimate = {}
     cluster_result = {}
 
@@ -51,11 +56,11 @@ def process(dataset, train, test, test_lable, true_k):
     # --- estimate k ---
 
     # DE+SA
-    k = ek.get_k_from_result(ek.estimate(2*true_k, de_result))
+    k = ek.estimate(2*true_k, de_result)
     estimate["DE+SA"] = k
 
     # SA
-    k = ek.get_k_from_result(ek.estimate(2*true_k,test))
+    k = ek.estimate(2*true_k,test)
     estimate["SA"] = k
 
     # --- clustering ---
@@ -89,20 +94,54 @@ def process(dataset, train, test, test_lable, true_k):
     result["cluster_result"] = cluster_result
     result["dataset"] = dataset
 
+    print(result)
+    return result
+
+def init_dataset(dataset):
+    if dataset == "uci":
+        train = uci_data
+        test = uci_data
+        test_lable = uci_target
+        true_k = 10
+        return train, test, test_lable, true_k
+    elif dataset == "usps":
+        train = usps_data
+        test = usps_test
+        test_lable = usps_test_lable
+        true_k = 10
+        return train, test, test_lable, true_k
+    elif dataset == "mnist":
+        train = mnist_train
+        test = mnist_test
+        test_lable = mnist_test_lable
+        true_k = 10
+        return train, test, test_lable, true_k
+    elif dataset == "fashion_mnist":
+        train = fashion_train
+        test = fashion_test
+        test_lable = fashion_test_lable
+        true_k = 10
+        return train, test, test_lable, true_k
+    elif dataset == "cifar10":
+        train = cifar_train
+        test = cifar_test
+        test_lable = cifar_test_lable_1d
+        true_k = 10
+        return train, test, test_lable, true_k
+
+def store_in_mongo(collection, result):
     # init mongo client
     client = MongoClient("localhost",61003)
     db = client['scde_result']
-    result_db = db.first_10_round
+    result_db = db[collection]
 
     # insert result to db
     result_db.insert_one(result)
+    client.close()
 
-
-process("mnist", mnist_train, mnist_test, mnist_test_lable,10)
-
-for i in range(0):
-    process("uci",uci_data,uci_data,uci_target,10)
-    process("usps",usps_data,usps_test, usps_test_lable,10)
-    process("mnist", mnist_train, mnist_test, mnist_test_lable,10)
-    process("fashion_mnist",fashion_train, fashion_test, fashion_test_lable,10)
-    process("cifar10", cifar_train, cifar_test, cifar_test_lable_1d, 10)
+for i in range(5):
+    store_in_mongo("first_5_round", process("uci"))
+    store_in_mongo("first_5_round", process("usps"))
+    store_in_mongo("first_5_round", process("mnist"))
+    store_in_mongo("first_5_round", process("fashion_mnist"))
+    store_in_mongo("first_5_round", process("cifar10"))
