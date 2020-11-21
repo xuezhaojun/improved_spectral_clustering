@@ -75,13 +75,14 @@ results(dir) : store results in json format
 
 ### process on a dataset
 
-If you want to do process on a dataset, just import process and 
+If you want to do process on a dataset, just import process and  do:
 ``` python
 # enter our project directory
 import process as p
 
 # here you can choose: uci, usps, mnist, fashion_mnist, cifar10
-p.process("uci") 
+result = p.process("uci") 
+print(result)
 ``` 
 
 ### Load results and print
@@ -95,13 +96,13 @@ import process as p
 
 # first_5_round : mongo collection name
 # uci : dataset name
-p.print("first_5_round","uci")
+p.print_avg("first_5_round","uci")
 ```
 
 ## Example(video)
 
 [process]()
 
-[print]()
+[print_avg]()
 
 

@@ -93,8 +93,6 @@ def process(dataset):
     result["estimate"] = estimate
     result["cluster_result"] = cluster_result
     result["dataset"] = dataset
-
-    print(result)
     return result
 
 def init_dataset(dataset):
@@ -139,7 +137,7 @@ def store_in_mongo(collection, result):
     result_db.insert_one(result)
     client.close()
 
-def print(collection, dataset):
+def print_avg(collection, dataset):
     # init mongo client
     client = MongoClient("localhost",61003)
     db = client['scde_result']
@@ -199,9 +197,9 @@ def print(collection, dataset):
     print("SC, ARI:{}".format(sum_sc_ari/round))
     print("SCDE, ARI:{}".format(sum_d_sc_ari/round))
 
-for i in range(5):
-    store_in_mongo("first_5_round", process("uci"))
-    store_in_mongo("first_5_round", process("usps"))
-    store_in_mongo("first_5_round", process("mnist"))
-    store_in_mongo("first_5_round", process("fashion_mnist"))
-    store_in_mongo("first_5_round", process("cifar10"))
+# for i in range(4):
+#     store_in_mongo("first_5_round", process("uci"))
+#     store_in_mongo("first_5_round", process("usps"))
+#     store_in_mongo("first_5_round", process("mnist"))
+#     store_in_mongo("first_5_round", process("fashion_mnist"))
+#     store_in_mongo("first_5_round", process("cifar10"))
