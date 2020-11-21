@@ -86,7 +86,7 @@ p.process("uci")
 
 ### Load results and print
 
-Please load our data into mongo, be DBName "scde_result"
+Please load our data into mongo, db Name must be "scde_result"
 
 After you load our result into mongo, you can use function "print" to show average results
 
