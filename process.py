@@ -4,7 +4,6 @@ from tensorflow.python.keras.backend import switch
 import clusters
 import datasets as ds
 import estimate_k as ek
-import gmeans
 
 from sklearn.cluster import KMeans
 from sklearn.cluster import SpectralClustering
@@ -204,9 +203,19 @@ def print_avg(collection, dataset):
     print("SC          | ARI:{}".format(sum_sc_ari/round))
     print("SCDE        | ARI:{}".format(sum_d_sc_ari/round))
 
-# for i in range(4):
-#     store_in_mongo("first_5_round", process("uci"))
-#     store_in_mongo("first_5_round", process("usps"))
-#     store_in_mongo("first_5_round", process("mnist"))
-#     store_in_mongo("first_5_round", process("fashion_mnist"))
-#     store_in_mongo("first_5_round", process("cifar10"))
+# process
+# for i in range(1):
+    # store_in_mongo("first_5_round", process("uci"))
+    # store_in_mongo("first_5_round", process("usps"))
+    # store_in_mongo("first_5_round", process("mnist"))
+    # store_in_mongo("first_5_round", process("fashion_mnist"))
+    # store_in_mongo("first_5_round", process("cifar10"))
+
+# g-means
+# for i in range(5):
+    # k = ek.estimate_gmeans(uci_data)
+    # k = ek.estimate_gmeans(usps_test)
+    # k = ek.estimate_gmeans(mnist_test)
+    # k = ek.estimate_gmeans(fashion_test)
+    # k = ek.estimate_gmeans(cifar_test)
+    # print(k)
