@@ -139,6 +139,66 @@ def store_in_mongo(collection, result):
     result_db.insert_one(result)
     client.close()
 
+def print(collection, dataset):
+    # init mongo client
+    client = MongoClient("localhost",61003)
+    db = client['scde_result']
+    result_db = db[collection]
+
+    results = result_db.find({"dataset":dataset})
+    client.close()
+
+    sum_de_sv_k = 0.0
+    sum_sa_k = 0.0
+    
+    sum_k_nmi = 0.0
+    sum_k_ari = 0.0
+
+    sum_d_k_nmi = 0.0
+    sum_d_k_ari = 0.0
+
+    sum_d_sc_nmi = 0.0
+    sum_d_sc_ari = 0.0
+
+    sum_sc_nmi = 0.0
+    sum_sc_ari = 0.0
+
+    for result in results:
+        estimate = result["estimate"]
+        cluster_result = result['cluster_result']
+
+        sum_de_sv_k += estimate["DE+SA"]
+        sum_sa_k += estimate["SA"]
+
+        sum_k_nmi += cluster_result["K-means"][0]
+        sum_k_ari += cluster_result["K-means"][1]
+
+        sum_d_k_nmi += cluster_result["DE+K-means"][0]
+        sum_d_k_ari += cluster_result["DE+K-means"][1]
+
+        sum_sc_nmi += cluster_result["SC"][0]
+        sum_sc_ari += cluster_result["SC"][1]
+
+        sum_d_sc_nmi += cluster_result["SCDE"][0]
+        sum_d_sc_ari += cluster_result["SCDE"][1]
+
+    round = len(results)
+
+    print("dataset:{}".format(dataset))
+    
+    print("DE+SA, k:{}".format(sum_de_sv_k/round))
+    print("SA, k:{}".format(sum_sa_k/round))
+    
+    print("K-means, NMI:{}".format(sum_k_nmi/round))
+    print("DE, K-means, NMI{}".format(sum_d_k_nmi/round))
+    print("SC, NMI:{}".format(sum_sc_nmi/round))
+    print("SCDE, NMI:{}".format(sum_d_sc_nmi/round))
+
+    print("K-means, ARI:{}".format(sum_k_ari/round))
+    print("DE, K-means, ARI{}".format(sum_d_k_ari/round))
+    print("SC, ARI:{}".format(sum_sc_ari/round))
+    print("SCDE, ARI:{}".format(sum_d_sc_ari/round))
+
 for i in range(5):
     store_in_mongo("first_5_round", process("uci"))
     store_in_mongo("first_5_round", process("usps"))

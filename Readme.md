@@ -12,7 +12,7 @@ Language: Python3.8
 
 Database: (used to store our data)
 
-## Structure
+## Project Structure
 
 clusters.py: abount "Deep Embedding" and "Cluster"
 
@@ -32,9 +32,14 @@ datasets.py : init needed datasets
 
 gmeans.py : an implementation a g-means
 
-process.py : run experiment step by step and store results into mongodb
+process.py : run experiment step by step and store results into mongodb; access results from mongodb and do calculate and print result(sum and avg)
 
-print.py : access results from mongodb and do calculate and print result(sum and avg)
+    function: process
+        do all process on a dataset
+    function: store_in_mongo
+        result process result into mongodb
+    function: print
+        access mongodb, get data and do sum and avg then print
 
 datasets(dir) : store datasets information
 
@@ -44,25 +49,33 @@ results(dir) : store results in json format
 
 -- first_5_round
 
-    run with par
+    run with normal parameters
 
 -- little_datasets_with_smaller_network
 
     run with a smaller network to do Deep Embedding;
-    origin Network in paper: 500-500-2000-10-2000-500-500
+
+    origin Network: 500-500-2000-10-2000-500-500
+
     smaller network: 200-800-10-800-200
+    
     datasets: uci, usps
 
 -- big_datasets_with_adam
 
     origin optimizer: sgd
+
     optimizer in this turn: adam
+
     datasets: cifar10
 
 
 
 ## Complie and Excute
 
+### process on a dataset
+
+If you want to do process on a dataset, just import process and 
 ``` python
 # enter our project directory
 import process as p
@@ -71,6 +84,24 @@ import process as p
 p.process("uci") 
 ``` 
 
+### Load results and print
 
-## Example
+Please load our data into mongo, be DBName "scde_result"
+
+After you load our result into mongo, you can use function "print" to show average results
+
+``` python
+import process as p
+
+# first_5_round : mongo collection name
+# uci : dataset name
+p.print("first_5_round","uci")
+```
+
+## Example(video)
+
+[process]()
+
+[print]()
+
 
