@@ -161,7 +161,10 @@ def print_avg(collection, dataset):
     sum_sc_nmi = 0.0
     sum_sc_ari = 0.0
 
+    round = 0
     for result in results:
+        round += 1
+
         estimate = result["estimate"]
         cluster_result = result['cluster_result']
 
@@ -180,22 +183,26 @@ def print_avg(collection, dataset):
         sum_d_sc_nmi += cluster_result["SCDE"][0]
         sum_d_sc_ari += cluster_result["SCDE"][1]
 
-    round = len(results)
+    print("times:",round)
 
     print("dataset:{}".format(dataset))
     
-    print("DE+SA, k:{}".format(sum_de_sv_k/round))
-    print("SA, k:{}".format(sum_sa_k/round))
+    print("DE+SA       | k:{}".format(sum_de_sv_k/round))
+    print("SA          | k:{}".format(sum_sa_k/round))
     
-    print("K-means, NMI:{}".format(sum_k_nmi/round))
-    print("DE, K-means, NMI{}".format(sum_d_k_nmi/round))
-    print("SC, NMI:{}".format(sum_sc_nmi/round))
-    print("SCDE, NMI:{}".format(sum_d_sc_nmi/round))
+    print()
 
-    print("K-means, ARI:{}".format(sum_k_ari/round))
-    print("DE, K-means, ARI{}".format(sum_d_k_ari/round))
-    print("SC, ARI:{}".format(sum_sc_ari/round))
-    print("SCDE, ARI:{}".format(sum_d_sc_ari/round))
+    print("K-means     | NMI:{}".format(sum_k_nmi/round))
+    print("DE, K-means | NMI:{}".format(sum_d_k_nmi/round))
+    print("SC          | NMI:{}".format(sum_sc_nmi/round))
+    print("SCDE        | NMI:{}".format(sum_d_sc_nmi/round))
+
+    print()
+
+    print("K-means     | ARI:{}".format(sum_k_ari/round))
+    print("DE, K-means | ARI:{}".format(sum_d_k_ari/round))
+    print("SC          | ARI:{}".format(sum_sc_ari/round))
+    print("SCDE        | ARI:{}".format(sum_d_sc_ari/round))
 
 # for i in range(4):
 #     store_in_mongo("first_5_round", process("uci"))
