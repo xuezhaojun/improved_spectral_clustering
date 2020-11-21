@@ -51,23 +51,11 @@ results(dir) : store results in json format
 
     run with normal parameters
 
--- smaller_network
+-- de_more
 
-    run with a smaller network to do Deep Embedding;
-
-    origin Network: 500-500-2000-10-2000-500-500
-
-    smaller network: 200-800-10-800-200
+    run with a bigger epochs
     
     datasets: uci, usps
-
--- with_adam
-
-    origin optimizer: sgd
-
-    optimizer in this turn: adam
-
-    datasets: cifar10
 
 ## Complie and Excute
 
