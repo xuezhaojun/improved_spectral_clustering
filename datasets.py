@@ -2,8 +2,12 @@
 import tensorflow.keras.datasets.mnist as mnist
 import tensorflow.keras.datasets.fashion_mnist as fashion_mnist
 import h5py
-from tensorflow.keras.datasets import cifar100,cifar10
+from tensorflow.keras.datasets import cifar10
+from sklearn.datasets import fetch_20newsgroups
 from sklearn import datasets
+from sklearn.datasets import fetch_20newsgroups
+from sklearn.feature_extraction.text import TfidfVectorizer
+import numpy as np
 
 # datasets sorted by dim
 
@@ -59,3 +63,19 @@ def get_fashion_mnist():
 def get_cifar10():
     (train, train_lable), (test, test_lables) = cifar10.load_data()
     return train, train_lable, test, test_lables
+
+# 20newsgroups
+# dim: 2000
+# train: 11314
+# test: 7532
+def get_20_newsgroups():
+    vectorizer = TfidfVectorizer(stop_words='english', max_features=2000)
+    train_data = fetch_20newsgroups(subset='train')
+    test_data = fetch_20newsgroups(subset='test')
+    train = vectorizer.fit_transform(train_data.data)
+    train = train.toarray()
+    print(train.shape)
+    print(type(type))
+    test = vectorizer.fit_transform(test_data.data)
+    test = test.toarray()
+    return train, train_data.target, test, test_data.target

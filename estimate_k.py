@@ -5,7 +5,6 @@ from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 from sklearn.metrics import davies_bouldin_score
 import tensorflow as tf
-import gmeans
 tf.config.run_functions_eagerly(True)
 
 # unpper_bound : k_u in paper
@@ -71,8 +70,3 @@ def DB(begin, end, dataset):
             max_score = score
         k+=1
     return max_k
-
-def estimate_gmeans(dataset):
-    g = gmeans.Gmeans(min_obs=500, random_state=1010, max_depth=1000,strictness=4)
-    g.fit(dataset)
-    return len(set(list(g.labels_)))

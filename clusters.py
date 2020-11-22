@@ -111,32 +111,6 @@ def de_more(train,test):
     # use encoder to encode raw data
     return encoder.predict(test)
 
-def de_with_adam(train,test):
-    # make autoencoder
-    input_dim = train.shape[1]
-    
-    input = keras.Input(shape=(input_dim,))
-    encoded = layers.Dense(500, activation="relu")(input)
-    encoded = layers.Dense(500, activation='relu')(encoded)
-    encoded = layers.Dense(2000, activation='relu')(encoded)
-    encoded = layers.Dense(10, activation='sigmoid')(encoded)
-
-    decoded = layers.Dense(2000, activation='relu')(encoded)
-    decoded = layers.Dense(500, activation='relu')(decoded)
-    decoded = layers.Dense(500, activation='relu')(decoded)
-    decoded = layers.Dense(input_dim, activation="relu")(decoded) 
-
-    # creater autoencoder
-    autoencoder = keras.Model(input, decoded)
-    encoder = keras.Model(input, encoded)
-
-    # train data
-    autoencoder.compile(loss=sse, optimizer='adam')
-    autoencoder.fit(train, train, epochs=50, batch_size=256,shuffle=True)
-
-    # use encoder to encode raw data
-    return encoder.predict(test)
-
 def score(sc_result, lable_true):
     # get nmi
     nmi = normalized_mutual_info_score(lable_true,sc_result)
