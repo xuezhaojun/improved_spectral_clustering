@@ -1,6 +1,4 @@
 import numpy as np
-from tensorflow.python.keras.activations import swish
-from tensorflow.python.keras.backend import switch
 import clusters
 import datasets as ds
 import estimate_k as ek
@@ -42,7 +40,11 @@ cifar_test_lable_1d = []
 for lable in cifar_test_lable:
     cifar_test_lable_1d.append(lable[0])
 
+# 20newsgroup
+newsgroup_train, _, newsgroup_test, newsgroup_lable = ds.get_20_newsgroups()
+
 def process(dataset):
+
     # get train,test,test_talbe,true_k by dataset
     train, test, test_lable, true_k = init_dataset(dataset)
 
@@ -51,6 +53,8 @@ def process(dataset):
 
     # DE
     de_result = clusters.de(train,test)
+    # de_result = clusters.de_with_adam(train,test)
+    # de_result = clusters.de_more(train,test)
 
     # --- estimate k ---
 
@@ -124,6 +128,12 @@ def init_dataset(dataset):
         test = cifar_test
         test_lable = cifar_test_lable_1d
         true_k = 10
+        return train, test, test_lable, true_k
+    elif dataset == "20newsgroup":
+        train = newsgroup_train
+        test = newsgroup_test
+        test_lable = newsgroup_lable
+        true_k = 20
         return train, test, test_lable, true_k
 
 def store_in_mongo(collection, result):
@@ -203,13 +213,19 @@ def print_avg(collection, dataset):
     print("SC          | ARI:{}".format(sum_sc_ari/round))
     print("SCDE        | ARI:{}".format(sum_d_sc_ari/round))
 
+# a test for autoencoder
+# ae = clusters.train_autoencoder(usps_data,10)
+# em = ae.predict(usps_test)
+# clusters.show_gray_img(usps_test, em,16)
+
 # process
 # for i in range(1):
-    # store_in_mongo("first_5_round", process("uci"))
-    # store_in_mongo("first_5_round", process("usps"))
+    # store_in_mongo("de_more", process("uci"))
+    # store_in_mongo("de_more", process("usps"))
     # store_in_mongo("first_5_round", process("mnist"))
     # store_in_mongo("first_5_round", process("fashion_mnist"))
     # store_in_mongo("first_5_round", process("cifar10"))
+    # store_in_mongo("first_5_round", process("20newsgroup"))
 
 # g-means
 # for i in range(5):

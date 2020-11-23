@@ -1,3 +1,7 @@
+The project is based on:
+
+Duan, Liang, et al. “Improving Spectral Clustering with Deep Embedding and Cluster Estimation.” 2019 IEEE International Conference on Data Mining (ICDM), 2019, doi:10.1109/icdm.2019.00027. 
+
 ## OS and package version
 
 OS: Windows10
@@ -29,6 +33,8 @@ estimate_k.py
     
 
 datasets.py : init needed datasets
+
+sa.py : early version of implementation
 
 gmeans.py : an implementation a g-means
 
@@ -112,6 +118,18 @@ SCDE        | ARI:0.6024829323439937
 
 ## Example(video)
 
-[click here to watch](https://vimeo.com/user99421930/review/481982375/21b5d8adde)
+[click here to watch](https://vimeo.com/481982375)
 
+## Contribution
+```
+Discussion:
+    Chen Yijing
+    DAI, Xingjian
+    Xue Zhao
+    TAM, Kwok Chung
 
+Code:
+    gmeans.py: Chen Yijing
+    sa.py: DAI, Xingjian
+    rest part: Xue Zhao
+```

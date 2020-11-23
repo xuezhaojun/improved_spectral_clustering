@@ -7,7 +7,9 @@ from sklearn.datasets import fetch_20newsgroups
 from sklearn import datasets
 from sklearn.datasets import fetch_20newsgroups
 from sklearn.feature_extraction.text import TfidfVectorizer
-import numpy as np
+import nltk
+from nltk.corpus import stopwords # interesting 'This' is not a stopwords but 'this' is
+from nltk.stem.porter import PorterStemmer
 
 # datasets sorted by dim
 
@@ -65,17 +67,16 @@ def get_cifar10():
     return train, train_lable, test, test_lables
 
 # 20newsgroups
-# dim: 2000
+# dim: 6336
 # train: 11314
 # test: 7532
-def get_20_newsgroups():
-    vectorizer = TfidfVectorizer(stop_words='english', max_features=2000)
+# TODO for now we reture 2000 features but not the most frequent words
+def get_20_newsgroups(): 
+    vectorizer = TfidfVectorizer(stop_words='english', min_df=30, max_df=0.2)
     train_data = fetch_20newsgroups(subset='train')
     test_data = fetch_20newsgroups(subset='test')
     train = vectorizer.fit_transform(train_data.data)
     train = train.toarray()
-    print(train.shape)
-    print(type(type))
     test = vectorizer.fit_transform(test_data.data)
     test = test.toarray()
     return train, train_data.target, test, test_data.target
